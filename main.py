@@ -2,7 +2,6 @@ import os
 import subprocess
 import time
 import json
-import base64
 import urllib.parse
 
 # Check if Ngrok is installed
@@ -14,10 +13,15 @@ def check_ngrok_installed():
         print("Ngrok is not installed. Please install Ngrok and try again.")
         return False
 
-# Start Ngrok HTTP tunnel on port 8765
+# Start Ngrok HTTP tunnel on port 8765 in a new terminal
 def start_ngrok():
     print("Starting Ngrok HTTP tunnel on port 8765...")
-    ngrok_process = subprocess.Popen(["ngrok", "http", "8765"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+    # Check platform (Windows or Unix-based)
+    if os.name == 'nt':  # For Windows
+        ngrok_process = subprocess.Popen(["start", "cmd", "/K", "ngrok", "http", "8765"], shell=True)
+    else:  # For Linux or macOS
+        ngrok_process = subprocess.Popen(["gnome-terminal", "--", "bash", "-c", "ngrok http 8765; exec bash"])
     
     # Wait for Ngrok to start and get the public URL
     time.sleep(3)  # Give Ngrok a few seconds to start

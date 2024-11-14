@@ -3,6 +3,7 @@ import subprocess
 import time
 import json
 import base64
+import urllib.parse
 
 # Check if Ngrok is installed
 def check_ngrok_installed():

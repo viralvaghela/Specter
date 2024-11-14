@@ -18,7 +18,8 @@ def start_ngrok():
     print("Starting Ngrok HTTP tunnel on port 8765...")
     ngrok_process = subprocess.Popen(["ngrok", "http", "8765"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
-     time.sleep(3)   
+    # Wait for Ngrok to start and get the public URL
+    time.sleep(3)  # Give Ngrok a few seconds to start
     try:
         # Read the URL from Ngrok's API
         ngrok_url = subprocess.check_output(["curl", "-s", "http://localhost:4040/api/tunnels"]).decode("utf-8")
@@ -41,7 +42,8 @@ def update_server_url(ngrok_url):
         file.write(updated_content)
     print(f"Updated {server_file} with Ngrok URL: {ngrok_url}")
 
- def update_client_url(ngrok_url):
+# Update the client.js file with the Ngrok WebSocket URL
+def update_client_url(ngrok_url):
     client_file = 'client.js'
     with open(client_file, 'r') as file:
         content = file.read()

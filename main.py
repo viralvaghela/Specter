@@ -58,7 +58,9 @@ def update_client_url(ngrok_url):
 def url_encode_client_js():
     with open("client.js", "r") as file:
         client_js = file.read()
-    encoded_js = base64.urlsafe_b64encode(client_js.encode()).decode()
+
+    # URL encode the content of client.js
+    encoded_js = urllib.parse.quote(client_js)
     return encoded_js
 
 # Main function to run the process
